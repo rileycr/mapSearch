@@ -26,21 +26,18 @@ EdgeWeight MatrixGraph::weight(NodeID u, NodeID v) const{
 	return M.at(u).at(v);
 }
 
-//TODO Not sure if this works but it compiles
 std::list<NWPair> MatrixGraph::getAdj(NodeID u) const{
 	return EList(u);
 }
 
 unsigned MatrixGraph::degree(NodeID u) const{
-	int degree = 0;
+	unsigned degree = 0;
 	if(0 <= u && u < M.size()){
-		for(int i = 0; i < M.at(u).size() ; i++){
+		for(unsigned i = 0; i < M.at(u).size() ; i++){
 			if(M.at(u).at(i) != 0)
 				degree++;
 		}
-	} else {
-		return;
-	}
+	} 
 	return degree;
 }
 
