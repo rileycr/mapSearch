@@ -11,7 +11,8 @@
 #include "ListGraph.h"
 
 ListGraph::ListGraph(int numNodes){
-
+	num_edges = 0;
+	edgeList.resize(numNodes);
 }
 
 ListGraph::~ListGraph(){
@@ -31,13 +32,15 @@ EdgeWeight ListGraph::weight(NodeID u, NodeID v) const {
 
 std::list<NWPair> ListGraph::getAdj(NodeID u) const {
 
-	return EList(u);
+	return edgeList[u];
 }
 
 unsigned ListGraph::degree(NodeID u) const {
-	
-
-	return 0;
+	int degree = 0;
+	if(0 <= u && u < edgeList.size()){
+		degree = edgeList[u].size();
+	} 
+	return degree;
 }
 
 unsigned ListGraph::size() const {
@@ -48,6 +51,5 @@ unsigned ListGraph::size() const {
 
 unsigned ListGraph::numEdges() const {
 
-
-	return 0;
+	return num_edges;
 }
