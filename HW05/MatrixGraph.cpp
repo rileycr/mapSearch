@@ -16,6 +16,10 @@ MatrixGraph::MatrixGraph(unsigned num_nodes){
 	M.resize(num_nodes);
 }
 
+MatrixGraph::~MatrixGraph(){
+
+}
+
 void MatrixGraph::addEdge(NodeID u, NodeID v, EdgeWeight weight){
 	M.at(u).at(v) = weight;
 
@@ -26,6 +30,7 @@ EdgeWeight MatrixGraph::weight(NodeID u, NodeID v) const{
 	return M.at(u).at(v);
 }
 
+//TODO
 std::list<NWPair> MatrixGraph::getAdj(NodeID u) const{
 	return EList(u);
 }
