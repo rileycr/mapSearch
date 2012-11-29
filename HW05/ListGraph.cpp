@@ -20,8 +20,19 @@ ListGraph::~ListGraph(){
 }
 
 void ListGraph::addEdge(NodeID u, NodeID v, EdgeWeight weight){
-
-
+	if(0 <= u && u < edgeList.size() && 0 <= v && v < edgeList.size() && u != v && weight > 0){
+		EList::iterator it;
+		it = edgeList[u].begin();
+		for(it = edgeList[u].begin(); it != edgeList[u].end(); it++){
+			if(it -> first == v){
+				return;
+			} 
+			it++;
+		}
+		edgeList[u].push_back(NWPair(v, weight));
+		edgeList[v].push_back(NWPair(u, weight));
+		num_edges++;
+	}
 }
 
 EdgeWeight ListGraph::weight(NodeID u, NodeID v) const {
@@ -31,8 +42,9 @@ EdgeWeight ListGraph::weight(NodeID u, NodeID v) const {
 }
 
 std::list<NWPair> ListGraph::getAdj(NodeID u) const {
-
-	return edgeList[u];
+	if(0 <= u && u < edgeList.size()){
+		return edgeList[u];
+	}
 }
 
 unsigned ListGraph::degree(NodeID u) const {
