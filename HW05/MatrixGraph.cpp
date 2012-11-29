@@ -10,15 +10,14 @@
 
 #include "MatrixGraph.h"
 
-//This initializes each edgeWeight for each vector to -1 meaning
-//there is no edge between the nodes.
+
 MatrixGraph::MatrixGraph(unsigned num_nodes){
 	num_edges = 0;
 	M.resize(num_nodes);
 	for(int i = 0; i < num_nodes; i++){
 		M.at(i).resize(num_nodes);
 		for(int j = 0; j < num_nodes; j++){
-			M.at(i).at(j) = -1;
+			M.at(i).at(j) = 0;
 		}
 	}
 }
@@ -29,7 +28,7 @@ MatrixGraph::~MatrixGraph(){
 
 void MatrixGraph::addEdge(NodeID u, NodeID v, EdgeWeight weight){
 	if(0 <= u && u < M.size() && 0 <= v && v < M.size() && u != v && weight > 0){
-		if(M.at(u).at(v) == -1){
+		if(M.at(u).at(v) == 0){
 			M.at(u).at(v) = weight;
 			M.at(v).at(u) = weight;
 			num_edges++;
@@ -42,8 +41,6 @@ EdgeWeight MatrixGraph::weight(NodeID u, NodeID v) const{
 	if(0 <= u && u < M.size() && 0 <= v && v < M.size()){
 		weight =  M.at(u).at(v);
 	}
-	if(weight = -1)
-		weight = 0;
 	return weight;
 }
 
