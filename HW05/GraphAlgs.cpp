@@ -28,13 +28,14 @@ std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G){
 	for(int i = 0; i < num_nodes; i++){
 		bestTour_[i] = i;  //Initalize as a starting point to find best tour
 	}
-	bestTourLength_ = tourDistance(bestTour_, num_nodes);
+	bestTourLength_ = tourDistance(bestTour_, num_nodes);  //Initalizes the distance for the first tour
 
-	tour(bestTour_, num_nodes, 0);
+	tour(bestTour_, num_nodes, 1);
 
 	for(int i = 0; i < num_nodes; i++){
 		bestTourNodes.push_back(bestTour_[i]);
 	}
+	
 	std::pair<std::vector<NodeID>, EdgeWeight> finalTour(bestTourNodes, bestTourLength_);
 	
 	return finalTour;
@@ -53,6 +54,8 @@ void tour(int* arr, int size, int startingPoint){
 	} else {
 		for(int i = startingPoint; i < size; i++){
 			swap(arr, startingPoint, i);
+			//Check to see if we can cut off recursion here if this tour is already too long
+
 			tour(arr, size, startingPoint++);
 			swap(arr, startingPoint, i);
 		}
@@ -61,10 +64,10 @@ void tour(int* arr, int size, int startingPoint){
 
 EdgeWeight tourDistance(int* arr, int num_nodes){
 	EdgeWeight tourDist = 0;
-	for(int i = 0; i < num_nodes - 1; i++){
-		tourDist += current_graph_ -> weight(arr[i], arr[i+1]);
+	for(int i = 0; i < num_nodes - 1; i++){                     //num_nodes - 1 accounts for counting the distance between
+		tourDist += current_graph_ -> weight(arr[i], arr[i+1]); //between the last two nodes before adding distance back to start
 	}
-	tourDist += current_graph_ -> weight(arr[num_nodes], arr[0]); //Distance from end back to start
+	tourDist += current_graph_ -> weight(arr[num_nodes-1], arr[0]); //Distance from end back to start
 	return tourDist;
 }
 
