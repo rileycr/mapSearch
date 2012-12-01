@@ -9,17 +9,21 @@
 */
 
 #include "GraphAlgs.h"
+#include "StarbucksMap.h"
+
 int* bestTour_;
 float bestTourLength_;
 Graph* current_graph_;
+void tour(int* arr, int size, int startingPoint);
+EdgeWeight tourDistance(int* arr, int num_nodes);
+void swap(int* arr, int first, int second);
 
 std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G){
 	current_graph_ = G;
-	std::pair<std::vector<NodeID>, EdgeWeight> finalTour;
 
 	int num_nodes = G -> size();
-	int* arr = new int[num_nodes];
 	std::vector<NodeID> bestTourNodes;
+	bestTour_ = new int[num_nodes];
 
 	for(int i = 0; i < num_nodes; i++){
 		bestTour_[i] = i;  //Initalize as a starting point to find best tour
@@ -28,6 +32,10 @@ std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G){
 
 	tour(bestTour_, num_nodes, 0);
 
+	for(int i = 0; i < num_nodes; i++){
+		bestTourNodes.push_back(bestTour_[i]);
+	}
+	std::pair<std::vector<NodeID>, EdgeWeight> finalTour(bestTourNodes, bestTourLength_);
 	
 	return finalTour;
 }
@@ -38,12 +46,12 @@ void tour(int* arr, int size, int startingPoint){
 		EdgeWeight currDist = tourDistance(arr, size);
 		if(currDist < bestTourLength_){
 			for(int i = 0; i < size; i++){
-				bestTour_[i] = arr[i];  //Makes 'bestTour' the new tour which is shorter
+				bestTour_[i] = arr[i];  //Makes 'bestTour_' the new tour which is shorter than it was
 			}
 			bestTourLength_ = currDist;
 		}
 	} else {
-		for(int i = startingPoint; i < size; i ++){
+		for(int i = startingPoint; i < size; i++){
 			swap(arr, startingPoint, i);
 			tour(arr, size, startingPoint++);
 			swap(arr, startingPoint, i);
@@ -53,11 +61,11 @@ void tour(int* arr, int size, int startingPoint){
 
 EdgeWeight tourDistance(int* arr, int num_nodes){
 	EdgeWeight tourDist = 0;
-	for(int i = 0; i < num_nodes; i++){
+	for(int i = 0; i < num_nodes - 1; i++){
 		tourDist += current_graph_ -> weight(arr[i], arr[i+1]);
 	}
 	tourDist += current_graph_ -> weight(arr[num_nodes], arr[0]); //Distance from end back to start
-
+	return tourDist;
 }
 
 void swap(int* arr, int first, int second){
