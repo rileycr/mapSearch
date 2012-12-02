@@ -16,24 +16,23 @@ float bestTourLength_;
 Graph* current_graph_;
 void tour(int* arr, int size, int startingPoint);
 EdgeWeight tourDistance(int* arr, int num_nodes);
-int* swap(int* arr, int first, int second);
+void swap(int* arr, int first, int second);
 
 std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G){
 	current_graph_ = G;
 
 	int num_nodes = G -> size();
-	std::vector<NodeID> bestTourNodes;
+	std::vector<NodeID> bestTourNodes (num_nodes);
 	bestTour_ = new int[num_nodes];
 
 	for(int i = 0; i < num_nodes; i++){
 		bestTour_[i] = i;  //Initalize as a starting point to find best tour
 	}
-	bestTourLength_ = tourDistance(bestTour_, num_nodes);  //Initalizes the distance for the first tour
+	bestTourLength_ = tourDistance(bestTour_, num_nodes);   //Initalizes the distance for the first tour
 
-	tour(bestTour_, num_nodes, 1);
-
+	tour(bestTour_, num_nodes, 0);
 	for(int i = 0; i < num_nodes; i++){
-		bestTourNodes.push_back(bestTour_[i]);
+		bestTourNodes[i] = bestTour_[i];
 	}
 	
 	std::pair<std::vector<NodeID>, EdgeWeight> finalTour(bestTourNodes, bestTourLength_);
@@ -53,11 +52,10 @@ void tour(int* arr, int size, int startingPoint){
 		}
 	} else {
 		for(int i = startingPoint; i < size; i++){
-			arr = swap(arr, startingPoint, i);
-			//Check to see if we can cut off recursion here if this tour is already too long
-
-			tour(arr, size, ++startingPoint);
-			arr = swap(arr, startingPoint, i);
+			swap(arr, startingPoint, i);
+			//TODO: Check to see if we can cut off recursion here if this tour is already too long
+			tour(arr, size, startingPoint + 1);
+			swap(arr, startingPoint, i);
 		}
 	}
 }
@@ -71,10 +69,8 @@ EdgeWeight tourDistance(int* arr, int num_nodes){
 	return tourDist;
 }
 
-int* swap(int* arr, int first, int second){
+void swap(int* arr, int first, int second){
 	int temp = arr[first];
 	arr[first] = arr[second];
-	arr[second] = temp;
-
-	return arr;
+	arr[second] = temp; arr;
 }
