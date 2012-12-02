@@ -24,7 +24,6 @@ std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G){
 	int num_nodes = G -> size();
 	std::vector<NodeID> bestTourNodes (num_nodes);
 	bestTour_ = new int[num_nodes];
-
 	for(int i = 0; i < num_nodes; i++){
 		bestTour_[i] = i;  //Initalize as a starting point to find best tour
 	}
@@ -35,8 +34,8 @@ std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G){
 		bestTourNodes[i] = bestTour_[i];
 	}
 	
-	std::pair<std::vector<NodeID>, EdgeWeight> finalTour(bestTourNodes, bestTourLength_);
-	
+	std::pair<std::vector<NodeID>, EdgeWeight> finalTour(bestTourNodes, tourDistance(bestTour_,num_nodes));
+
 	return finalTour;
 }
 
@@ -45,6 +44,7 @@ void tour(int* arr, int size, int startingPoint){
 	if(size - startingPoint == 1){
 		EdgeWeight currDist = tourDistance(arr, size);
 		if(currDist < bestTourLength_){
+			
 			for(int i = 0; i < size; i++){
 				bestTour_[i] = arr[i];  //Makes 'bestTour_' the new tour which is shorter than it was
 			}
