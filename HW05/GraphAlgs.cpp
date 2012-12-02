@@ -16,7 +16,7 @@ float bestTourLength_;
 Graph* current_graph_;
 void tour(int* arr, int size, int startingPoint);
 EdgeWeight tourDistance(int* arr, int num_nodes);
-void swap(int* arr, int first, int second);
+int* swap(int* arr, int first, int second);
 
 std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G){
 	current_graph_ = G;
@@ -53,11 +53,11 @@ void tour(int* arr, int size, int startingPoint){
 		}
 	} else {
 		for(int i = startingPoint; i < size; i++){
-			swap(arr, startingPoint, i);
+			arr = swap(arr, startingPoint, i);
 			//Check to see if we can cut off recursion here if this tour is already too long
 
-			tour(arr, size, startingPoint++);
-			swap(arr, startingPoint, i);
+			tour(arr, size, ++startingPoint);
+			arr = swap(arr, startingPoint, i);
 		}
 	}
 }
@@ -71,8 +71,10 @@ EdgeWeight tourDistance(int* arr, int num_nodes){
 	return tourDist;
 }
 
-void swap(int* arr, int first, int second){
+int* swap(int* arr, int first, int second){
 	int temp = arr[first];
 	arr[first] = arr[second];
 	arr[second] = temp;
+
+	return arr;
 }
