@@ -5,7 +5,8 @@
 * @author Cooper Riley
 *
 * @note This is the implimentation of the GraphAlgs.h provided for 
-* this assignment.
+* this assignment.  Fufilled Quality Measures A, B, C, and D with branch and bound.
+*
 */
 
 #include "GraphAlgs.h"
@@ -52,8 +53,14 @@ void tour(int* arr, int size, int startingPoint){
 		}
 	} else {
 		for(int i = startingPoint; i < size; i++){
+
+			//Branch and bound conditional, we can use the same method and just replace num_nodes with startingPoint
+			if(startingPoint != 0){
+				if(tourDistance(arr, startingPoint) > bestTourLength_)
+					return;
+			}
+
 			swap(arr, startingPoint, i);
-			//TODO: Check to see if we can cut off recursion here if this tour is already too long
 			tour(arr, size, startingPoint + 1);
 			swap(arr, startingPoint, i);
 		}
@@ -66,6 +73,7 @@ EdgeWeight tourDistance(int* arr, int num_nodes){
 		tourDist += current_graph_ -> weight(arr[i], arr[i+1]); //between the last two nodes before adding distance back to start
 	}
 	tourDist += current_graph_ -> weight(arr[num_nodes-1], arr[0]); //Distance from end back to start
+
 	return tourDist;
 }
 
